@@ -1725,8 +1725,8 @@ h3 { font-size: 1.2rem; }
 
   .hero { padding: 38px 0 30px; }
   .hero-badge-row { max-width: 100%; justify-content: center; text-align: center; line-height: 1.35; }
-  .hero h1 { max-width: 100%; font-size: 2rem; line-height: 1.08; letter-spacing: -0.025em; }
-  .hero .subtext { max-width: 330px; font-size: 0.9rem; }
+  .hero h1 { max-width: 100%; font-size: 2.35rem; line-height: 1.08; letter-spacing: -0.025em; }
+  .hero .subtext { display: none; }
   .hero-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 24px; padding-top: 18px; }
   .hero-stat-value { font-size: 1.2rem; }
   .hero-stat-label { font-size: 0.65rem; }
@@ -1754,7 +1754,7 @@ h3 { font-size: 1.2rem; }
 
 @media (max-width: 420px) {
   .container { width: calc(100vw - 24px); }
-  .hero h1 { font-size: 1.8rem; }
+  .hero h1 { font-size: 2.1rem; }
   .hero-badge-row { font-size: 0.66rem; padding: 7px 10px; }
   .hero-stats { gap: 5px; }
   .hero-stat-value { font-size: 1.08rem; }
