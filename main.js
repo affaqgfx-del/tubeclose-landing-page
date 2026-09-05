@@ -1,4 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const supabaseUrl = 'https://argnkigepffzbykthksw.supabase.co';
+  const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyZ25raWdlcGZmemJ5a3Roa3N3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1Njc2NzUsImV4cCI6MjEwNDE0MzY3NX0.3IXLvKn9Lsux-FNWnQq_POZikuIKYubStjj4ceVYnE4';
+
+  async function loadSiteContent() {
+    const response = await fetch(`${supabaseUrl}/rest/v1/site_content?select=key,value`, {
+      headers: { apikey: supabaseAnonKey, Authorization: `Bearer ${supabaseAnonKey}` }
+    });
+    if (!response.ok) return;
+    const rows = await response.json();
+    const content = Object.fromEntries(rows.map((row) => [row.key, row.value]));
+    const headline = document.getElementById('heroHeadline');
+    if (headline && content.hero_headline) headline.textContent = content.hero_headline;
+    document.querySelectorAll('a[href="#qualification-form"]').forEach((link) => {
+      if (content.hero_cta_link) link.href = content.hero_cta_link;
+      if (content.hero_cta_text) link.childNodes[0].nodeValue = `${content.hero_cta_text} `;
+    });
+    const vslSection = document.getElementById('vslSection');
+    const vslPlayer = document.getElementById('vslPlayer');
+    if (vslSection && vslPlayer && content.vsl_wistia_id) {
+      vslSection.hidden = false;
+      const player = document.createElement('iframe');
+      player.src = `https://fast.wistia.net/embed/iframe/${encodeURIComponent(content.vsl_wistia_id)}?videoFoam=true`;
+      player.title = 'TubeClose strategy video';
+      player.allow = 'autoplay; fullscreen';
+      player.allowFullscreen = true;
+      vslPlayer.append(player);
+    }
+    const testimonialSection = document.getElementById('testimonialVideoSection');
+    const testimonialPlayer = document.getElementById('testimonialPlayer');
+    const testimonialTitle = document.getElementById('testimonialVideoTitle');
+    if (testimonialSection && testimonialPlayer && content.testimonial_wistia_id) {
+      testimonialSection.hidden = false;
+      if (testimonialTitle && content.testimonial_client_name) {
+        testimonialTitle.textContent = `${content.testimonial_client_name}: a client story`;
+      }
+      const player = document.createElement('iframe');
+      player.src = `https://fast.wistia.net/embed/iframe/${encodeURIComponent(content.testimonial_wistia_id)}?videoFoam=true`;
+      player.title = 'TubeClose client testimonial';
+      player.allow = 'autoplay; fullscreen';
+      player.allowFullscreen = true;
+      testimonialPlayer.append(player);
+    }
+  }
+
+  loadSiteContent().catch(() => {});
+
   document.querySelectorAll('.section, .hero, .page-hero, .footer').forEach((element, index) => {
     element.classList.add('reveal');
     element.style.transitionDelay = `${index * 70}ms`;

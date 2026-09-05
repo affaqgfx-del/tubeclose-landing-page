@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TubeClose Admin</title>
+  <link rel="icon" href="https://framerusercontent.com/images/LfIAenBygjpMhnnKQjpgS8eivw.png">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="admin-page">
+  <section class="admin-login" id="adminLogin">
+    <div class="admin-login-card">
+      <img src="https://framerusercontent.com/images/LfIAenBygjpMhnnKQjpgS8eivw.png" alt="TubeClose logo" width="64" height="64">
+      <h1>TubeClose Admin</h1>
+      <p>Sign in to manage the live landing page.</p>
+      <form id="loginForm">
+        <input id="loginEmail" type="email" placeholder="Admin email" required>
+        <input id="loginPassword" type="password" placeholder="Password" required>
+        <button class="btn btn--primary" type="submit">Sign in</button>
+        <p class="admin-error" id="loginError"></p>
+      </form>
+    </div>
+  </section>
+  <div id="adminApp" hidden>
+  <header class="admin-header">
+    <a href="index.html" class="brand">
+      <img src="https://framerusercontent.com/images/LfIAenBygjpMhnnKQjpgS8eivw.png" alt="TubeClose logo" width="40" height="40">
+      <span>TubeClose Admin</span>
+    </a>
+    <span class="admin-status" id="saveStatus">Saved locally</span>
+  </header>
+
+  <main class="admin-layout">
+    <section class="admin-panel">
+      <p class="eyebrow"><span class="eyebrow-dot"></span> Content editor</p>
+      <h1>Control your landing page.</h1>
+      <p class="admin-lead">Update the common content without touching HTML or CSS.</p>
+
+      <form id="contentForm" class="admin-form">
+        <fieldset>
+          <legend>Hero</legend>
+          <label>Headline<input id="heroHeadline" type="text" value="We Build YouTube Systems That Generate Qualified Leads."></label>
+          <label>CTA text<input id="heroCta" type="text" value="Book Your Strategy Call"></label>
+          <label>CTA link<input id="heroCtaLink" type="url" value="https://tally.so/r/xXW7YE"></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>VSL video</legend>
+          <label>Wistia media ID<input id="vslWistiaId" type="text" placeholder="Example: abc123xyz"></label>
+          <div class="admin-video-preview" id="vslPreview"><span>Video preview keeps its original ratio.</span></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Case study testimonial</legend>
+          <label>Client name<input id="testimonialName" type="text" placeholder="Client or company name"></label>
+          <label>Wistia media ID<input id="testimonialWistiaId" type="text" placeholder="Example: abc123xyz"></label>
+          <div class="admin-video-preview admin-video-preview--small" id="testimonialPreview"><span>Any portrait, landscape, square, or custom ratio is supported.</span></div>
+        </fieldset>
+
+        <div class="admin-actions">
+          <button class="btn btn--primary" type="submit">Save changes</button>
+          <button class="btn btn--ghost" id="resetContent" type="button">Reset</button>
+        </div>
+      </form>
+      <p class="admin-note">Text and Wistia IDs save to Supabase. The landing page reads the latest published values on refresh.</p>
+    </section>
+
+    <aside class="admin-preview admin-live-site">
+      <div class="preview-toolbar"><strong>Actual landing page</strong><a href="index.html" target="_blank" rel="noopener">Open full page &rarr;</a></div>
+      <iframe class="admin-site-frame" src="index.html" title="Actual TubeClose landing page"></iframe>
+    </aside>
+  </main>
+  <script src="admin.js"></script>
+  </div>
+</body>
+</html>
