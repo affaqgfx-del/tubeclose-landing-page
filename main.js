@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const headline = document.getElementById('heroHeadline');
     if (headline && content.hero_headline) headline.textContent = content.hero_headline;
     document.querySelectorAll('a[href="#qualification-form"]').forEach((link) => {
-      if (content.hero_cta_link) link.href = content.hero_cta_link;
       if (content.hero_cta_text) link.childNodes[0].nodeValue = `${content.hero_cta_text} `;
     });
     const vslSection = document.getElementById('vslSection');
