@@ -19,6 +19,7 @@
   const login = document.getElementById('adminLogin');
   const app = document.getElementById('adminApp');
   const loginForm = document.getElementById('loginForm');
+  const loginButton = document.getElementById('loginButton');
   const loginError = document.getElementById('loginError');
   const form = document.getElementById('contentForm');
   const status = document.getElementById('saveStatus');
@@ -36,12 +37,10 @@
     await load();
   }
 
-  loginForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const button = loginForm.querySelector('button[type="submit"]');
+  async function signIn() {
     loginError.textContent = '';
-    button.disabled = true;
-    button.textContent = 'Signing in...';
+    loginButton.disabled = true;
+    loginButton.textContent = 'Connecting...';
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: document.getElementById('loginEmail').value.trim(),
@@ -55,10 +54,13 @@
     } catch (error) {
       loginError.textContent = error.message || 'Could not sign in. Check your connection.';
     } finally {
-      button.disabled = false;
-      button.textContent = 'Sign in';
+      loginButton.disabled = false;
+      loginButton.textContent = 'Sign in';
     }
-  });
+  }
+
+  loginButton.addEventListener('click', signIn);
+  loginForm.addEventListener('submit', (event) => { event.preventDefault(); signIn(); });
 
   function getContent() {
     return Object.keys(fields).reduce((content, key) => {

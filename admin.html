@@ -14,10 +14,10 @@
       <img src="https://framerusercontent.com/images/LfIAenBygjpMhnnKQjpgS8eivw.png" alt="TubeClose logo" width="64" height="64">
       <h1>TubeClose Admin</h1>
       <p>Sign in to manage the live landing page.</p>
-      <form id="loginForm" onsubmit="return false">
+      <form id="loginForm" novalidate>
         <input id="loginEmail" type="email" placeholder="Admin email" required>
         <input id="loginPassword" type="password" placeholder="Password" required>
-        <button class="btn btn--primary" type="submit">Sign in</button>
+        <button class="btn btn--primary" id="loginButton" type="button">Sign in</button>
         <p class="admin-error" id="loginError"></p>
       </form>
     </div>
