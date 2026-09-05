@@ -1732,6 +1732,7 @@ h3 { font-size: 1.2rem; }
 }
 .admin-header .brand { font-size: 1.15rem; }
 .admin-status { color: #247a49; font-size: 0.85rem; font-weight: 600; }
+.admin-error { min-height: 20px; margin: 10px 0 0; color: #c2410c; font-size: 0.82rem; }
 .admin-layout {
   width: min(1320px, calc(100vw - 48px));
   margin: 0 auto;

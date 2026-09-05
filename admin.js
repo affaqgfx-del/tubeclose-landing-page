@@ -1,6 +1,10 @@
 (() => {
   const SUPABASE_URL = 'https://argnkigepffzbykthksw.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyZ25raWdlcGZmemJ5a3Roa3N3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1Njc2NzUsImV4cCI6MjEwNDE0MzY3NX0.3IXLvKn9Lsux-FNWnQq_POZikuIKYubStjj4ceVYnE4';
+  if (!window.supabase) {
+    document.getElementById('loginError').textContent = 'Login service could not load. Refresh the page and try again.';
+    return;
+  }
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const storageKey = 'tubeclose-admin-content';
   const defaults = {
@@ -34,13 +38,26 @@
 
   loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+    const button = loginForm.querySelector('button[type="submit"]');
     loginError.textContent = '';
-    const { error } = await supabase.auth.signInWithPassword({
-      email: document.getElementById('loginEmail').value,
-      password: document.getElementById('loginPassword').value
-    });
-    if (error) loginError.textContent = error.message;
-    else await openApp((await supabase.auth.getSession()).data.session);
+    button.disabled = true;
+    button.textContent = 'Signing in...';
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPassword').value
+      });
+      if (error) {
+        loginError.textContent = error.message;
+      } else {
+        await openApp(data.session);
+      }
+    } catch (error) {
+      loginError.textContent = error.message || 'Could not sign in. Check your connection.';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Sign in';
+    }
   });
 
   function getContent() {

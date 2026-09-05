@@ -14,7 +14,7 @@
       <img src="https://framerusercontent.com/images/LfIAenBygjpMhnnKQjpgS8eivw.png" alt="TubeClose logo" width="64" height="64">
       <h1>TubeClose Admin</h1>
       <p>Sign in to manage the live landing page.</p>
-      <form id="loginForm">
+      <form id="loginForm" onsubmit="return false">
         <input id="loginEmail" type="email" placeholder="Admin email" required>
         <input id="loginPassword" type="password" placeholder="Password" required>
         <button class="btn btn--primary" type="submit">Sign in</button>
@@ -71,7 +71,7 @@
       <iframe class="admin-site-frame" src="index.html" title="Actual TubeClose landing page"></iframe>
     </aside>
   </main>
-  <script src="admin.js"></script>
+  <script src="admin.js?v=3"></script>
   </div>
 </body>
 </html>
