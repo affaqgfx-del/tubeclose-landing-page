@@ -1,11 +1,9 @@
 (() => {
   const SUPABASE_URL = 'https://argnkigepffzbykthksw.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyZ25raWdlcGZmemJ5a3Roa3N3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1Njc2NzUsImV4cCI6MjEwNDE0MzY3NX0.3IXLvKn9Lsux-FNWnQq_POZikuIKYubStjj4ceVYnE4';
-  if (!window.supabase) {
-    document.getElementById('connectionStatus').textContent = 'Login service did not load. Upload the latest admin.html and admin.js, then redeploy.';
-    return;
-  }
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabase = window.supabase && window.supabase.createClient
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
   document.getElementById('connectionStatus').textContent = 'Login service ready';
   document.getElementById('connectionStatus').classList.add('admin-ready');
   const storageKey = 'tubeclose-admin-content';
@@ -48,14 +46,22 @@
     loginButton.disabled = true;
     loginButton.textContent = 'Connecting...';
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: document.getElementById('loginEmail').value.trim(),
-        password: document.getElementById('loginPassword').value
+      const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('loginEmail').value.trim(),
+          password: document.getElementById('loginPassword').value
+        })
       });
-      if (error) {
-        loginError.textContent = error.message;
+      const data = await response.json();
+      if (!response.ok) {
+        loginError.textContent = data.error_description || data.msg || data.message || 'Invalid login credentials.';
       } else {
-        await openApp(data.session);
+        window.sessionStorage.setItem('tubeclose-access-token', data.access_token);
+        login.hidden = true;
+        app.hidden = false;
+        await load();
       }
     } catch (error) {
       loginError.textContent = error.message || 'Could not sign in. Check your connection.';
@@ -137,6 +143,8 @@
   });
 
   load();
-  supabase.auth.getSession().then(({ data }) => openApp(data.session));
-  supabase.auth.onAuthStateChange((_event, session) => openApp(session));
+  if (supabase) {
+    supabase.auth.getSession().then(({ data }) => openApp(data.session));
+    supabase.auth.onAuthStateChange((_event, session) => openApp(session));
+  }
 })();
