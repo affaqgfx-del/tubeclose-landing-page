@@ -73,6 +73,49 @@
     </aside>
   </main>
   <script src="admin.js?v=4"></script>
+  <script>
+    window.setTimeout(() => {
+      const status = document.getElementById('connectionStatus');
+      const button = document.getElementById('loginButton');
+      const error = document.getElementById('loginError');
+      const login = document.getElementById('adminLogin');
+      const app = document.getElementById('adminApp');
+      if (!status || !button || !error || !status.textContent.includes('Checking')) return;
+
+      status.textContent = 'Login service ready';
+      status.classList.add('admin-ready');
+      button.addEventListener('click', async () => {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        if (!email || !password) {
+          error.textContent = 'Enter your Supabase email and password first.';
+          return;
+        }
+        button.disabled = true;
+        button.textContent = 'Connecting...';
+        error.textContent = '';
+        try {
+          const response = await fetch('https://argnkigepffzbykthksw.supabase.co/auth/v1/token?grant_type=password', {
+            method: 'POST',
+            headers: {
+              apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyZ25raWdlcGZmemJ5a3Roa3N3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1Njc2NzUsImV4cCI6MjEwNDE0MzY3NX0.3IXLvKn9Lsux-FNWnQq_POZikuIKYubStjj4ceVYnE4',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+          });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error_description || result.msg || result.message || 'Invalid login credentials.');
+          login.hidden = true;
+          app.hidden = false;
+        } catch (loginError) {
+          error.textContent = loginError.message;
+        } finally {
+          button.disabled = false;
+          button.textContent = 'Sign in';
+        }
+      }, { once: true });
+    }, 700);
+  </script>
   </div>
 </body>
 </html>
