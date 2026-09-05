@@ -2,10 +2,12 @@
   const SUPABASE_URL = 'https://argnkigepffzbykthksw.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFyZ25raWdlcGZmemJ5a3Roa3N3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1Njc2NzUsImV4cCI6MjEwNDE0MzY3NX0.3IXLvKn9Lsux-FNWnQq_POZikuIKYubStjj4ceVYnE4';
   if (!window.supabase) {
-    document.getElementById('loginError').textContent = 'Login service could not load. Refresh the page and try again.';
+    document.getElementById('connectionStatus').textContent = 'Login service did not load. Upload the latest admin.html and admin.js, then redeploy.';
     return;
   }
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  document.getElementById('connectionStatus').textContent = 'Login service ready';
+  document.getElementById('connectionStatus').classList.add('admin-ready');
   const storageKey = 'tubeclose-admin-content';
   const defaults = {
     heroHeadline: 'We Build YouTube Systems That Generate Qualified Leads.',
@@ -38,6 +40,10 @@
   }
 
   async function signIn() {
+    if (!document.getElementById('loginEmail').value || !document.getElementById('loginPassword').value) {
+      loginError.textContent = 'Enter your Supabase email and password first.';
+      return;
+    }
     loginError.textContent = '';
     loginButton.disabled = true;
     loginButton.textContent = 'Connecting...';
